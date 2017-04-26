@@ -1,0 +1,236 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans   
+           http://www.springframework.org/schema/beans/spring-beans.xsd  
+           http://www.springframework.org/schema/context   
+           http://www.springframework.org/schema/context/spring-context.xsd">
+           
+    <bean id="analysisDayTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<bean class="com.wtoip.analysis.biz.task.AnalysisDayTask"/>
+				</property>
+				<property name="targetMethod">
+					<value>execute</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<!-- 店铺 每天00:05:00 触发,每小时检查一次-->
+			<!-- <value>0 5 0/1 * * ?</value> -->
+			<value>5 * * * * ?</value>
+		</property>
+	</bean> 
+	
+	<bean id="analysisDayClickTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<bean class="com.wtoip.analysis.biz.task.AnalysisDayClickTask"/>
+				</property>
+		        <property name="targetMethod" value="execute" />
+		        <property name="concurrent" value="false" />
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<!-- 店铺点击事件,每天00:25:00 触发,每小时检查一次-->
+			<!-- <value>0 25 0/1 * * ?</value> -->
+			<value>5 * * * * ?</value>
+		</property>
+	</bean>
+	
+	<bean id="analysisDayClickVirtualTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<bean class="com.wtoip.analysis.biz.task.AnalysisDayClickVirtualTask"/>
+				</property>
+		        <property name="targetMethod" value="execute" />
+		        <property name="concurrent" value="false" />
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<!-- 店铺点击事件虚拟数据,必须保证analysisDayClickTrigger执行完之后才能执行,每天01:05:00 触发,每小时检查一次-->
+			<!-- <value>0 5 1/1 * * ?</value> -->
+			<value>20 * * * * ?</value>
+		</property>
+	</bean>
+	
+     <bean id="analysisDayVirtualTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<bean class="com.wtoip.analysis.biz.task.AnalysisDayVirtualTask"/>
+				</property>
+				<property name="targetMethod">
+					<value>execute</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<!-- 店铺点击事件虚拟数据,必须保证analysisDayTrigger,analysisDayClickVirtualTrigger 每天02:05:00触发,每小时检查一次-->
+			<!-- <value>0 5 2/1 * * ?</value> -->
+			<value>30 * * * * ?</value>
+		</property>
+	</bean> 
+	
+	<bean id="analysisDayOrderTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<bean class="com.wtoip.analysis.biz.task.AnalysisDayOrderTask"/>
+				</property>
+				<property name="targetMethod">
+					<value>execute</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<!-- <value>0 5 2/1 * * ?</value> -->
+			<value>30 * * * * ?</value>
+		</property>
+	</bean>
+	
+	<bean id="analysisOrderTradeDayTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<bean class="com.wtoip.analysis.biz.task.AnalysisOrderTradeDayTask"/>
+				</property>
+				<property name="targetMethod">
+					<value>execute</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<!-- <value>0 5 2/1 * * ?</value> -->
+			<value>30 * * * * ?</value>
+		</property>
+	</bean>
+           
+    <bean id="mallDesignTopTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<bean class="com.wtoip.analysis.biz.task.MallDesignTopTask"/>
+				</property>
+				<property name="targetMethod">
+					<value>execute</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<!-- 店铺装修实力排行, 周一03:25:00触发,每小时检查一次-->
+			<!-- <value>0 25 3/1 ? * MON</value> -->
+			<value>50 * * * * ?</value>
+		</property>
+	</bean>        
+	
+	<bean id="mallPvTopTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<bean class="com.wtoip.analysis.biz.task.MallPvTopTask"/>
+				</property>
+				<property name="targetMethod">
+					<value>execute</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<!-- 店铺曝光量排行, 周一03:25:00触发,每小时检查一次-->
+			<!-- <value>0 25 3/1 ? * MON</value> -->
+			<value>50 * * * * ?</value>
+		</property>
+	</bean>
+	
+	<bean id="mallTradeTopTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<bean class="com.wtoip.analysis.biz.task.MallTradeTopTask"/>
+				</property>
+				<property name="targetMethod">
+					<value>execute</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<!-- 店铺曝光量排行, 周一03:25:00触发,每小时检查一次-->
+			<!-- <value>0 25 3/1 ? * MON</value> -->
+			<value>50 * * * * ?</value>
+		</property>
+	</bean>        
+	
+		 <bean id="oneTimeTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<bean
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<bean class="com.wtoip.analysis.biz.task.OneTimeTask"/>
+				</property>
+				<property name="targetMethod">
+					<value>execute</value>
+				</property>
+				<property name="concurrent">
+					<value>false</value>
+				</property>
+			</bean>
+		</property>
+		<property name="cronExpression">
+			<!-- <value>0 05 0 * * ?</value> -->
+			<value>50 * * * * ?</value>
+		</property>
+	</bean> 
+	
+	<bean id="startQuertz" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="analysisDayTrigger" />
+				<ref bean="analysisDayClickTrigger" />
+				<ref bean="analysisDayClickVirtualTrigger" />
+				<ref bean="analysisDayVirtualTrigger" />
+				<ref bean="mallDesignTopTrigger" />
+				<ref bean="mallPvTopTrigger" />
+				<ref bean="mallTradeTopTaskTrigger" />
+				<ref bean="analysisDayOrderTaskTrigger" />
+				<ref bean="analysisOrderTradeDayTrigger" />
+				<ref bean="oneTimeTrigger"/>
+			</list>
+		</property>
+		<property name="configLocation" value="classpath:quartz.properties"/>
+	</bean>
+</beans>
